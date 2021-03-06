@@ -2,6 +2,7 @@ package com.example.myfirstapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.Gravity;
@@ -17,7 +18,9 @@ import java.net.Socket;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
-   EditText matno;
+
+    public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
+    EditText matno;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void onClick(View view) throws IOException {
         matno = findViewById(R.id.editTextNumber);
-        System.out.println(matno.getText());
+
         String sentece;
         String modifiedSentence;
         try {
@@ -47,15 +50,15 @@ public class MainActivity extends AppCompatActivity {
             TextView text = findViewById(R.id.textView3);
             text.setGravity(Gravity.CENTER);
             text.setText(modifiedSentence);
-            String test= converttoasci(sentece);
-            System.out.println(test);
+
+
             clientSocket.close();
         }
         catch(IOException e){
             e.printStackTrace();
         }
     }
-    
+
     public String converttoasci(String matno){
         String result="";
         char [] chararray = matno.toCharArray();
@@ -100,9 +103,21 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
-        result = Arrays.toString(chararray);
+        result = new String(chararray);
+
 
         }
         return result;
+    }
+    public void Clickconverttoasci(View view){
+        Intent intent = new Intent(this, DisplayAsciActivity.class);
+
+        matno = findViewById(R.id.editTextNumber);
+        String asci = converttoasci(matno.getText().toString());
+        System.out.println("Main");
+        System.out.println(matno.toString());
+        intent.putExtra(EXTRA_MESSAGE, asci);
+        startActivity(intent);
+
     }
 }
